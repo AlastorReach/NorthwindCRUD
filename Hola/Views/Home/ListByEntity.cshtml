@@ -1,0 +1,139 @@
+﻿
+<div id="list-by-entity">
+    <h2 class="text-center">ListByEntity</h2>
+    <div id="search-entity-container">
+        <div class="form-group">
+            <input class="form-control mx-auto" type="search" placeholder="Search Entity By Name" id="search-entity" />
+        </div>
+    </div>
+    <div id="entity-list-data-results">
+        <ul id="entity"></ul>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        (function () {
+            var search_input = document.getElementById("search-entity");
+            var currentPage = 1;
+            search_input.addEventListener("keypress", searchEntity, false);
+
+            function searchEntity(e) {
+                if (e.which == 13) {
+                    currentPage = 1;
+                    var input_text = search_input.value;
+                    if (input_text != "" && input_text.length >= 3) {
+                        var ajax = new XMLHttpRequest();
+                        var formData = new FormData();
+                        formData.append("entityName", input_text);
+                        formData.append("currentPage", currentPage);
+                        ajax.addEventListener("load", function () { populateList(this, 0) }, false);
+                        ajax.open("POST", "/Home/SearchEntity");
+                        ajax.send(formData);
+                    }
+                }
+            }
+
+            function loadMore(e) {
+                console.log(e.target);
+                e.target.parentNode.removeChild(e.target);
+                var input_text = document.getElementById("e_f").value;
+                currentPage = currentPage + 1;
+                var ajax = new XMLHttpRequest();
+                var formData = new FormData();
+                formData.append("entityName", input_text);
+                formData.append("currentPage", currentPage);
+                ajax.addEventListener("load", function () { populateList(this, 1) }, false);
+                ajax.open("POST", "/Home/SearchEntity");
+                ajax.send(formData);
+            }
+
+            function populateList(ajax, type) {
+
+                var result = JSON.parse(ajax.responseText);
+                console.log(result);
+                if (result !== "Nothing found") {
+                    
+                    console.log(allPropertyNames);
+                    var ul_entity = document.getElementById("entity");
+                    if (type == 0) {
+                        if (ul_entity.children.length > 0) {
+                            ul_entity.innerHTML = "";
+                        }
+                    }
+                    for (let i = 0; i < result.length; i++) {
+                        var li = document.createElement("li");
+                        ul_entity.append(li);
+                        var table = document.createElement("table");
+                        table.classList.add("table");
+                        if (i % 2 == 0) {
+                            table.classList.add("table-dark");
+                        }
+                        else {
+                            table.classList.add("table-white");
+                        }
+                        table.classList.add("table-bordered");
+                        var allPropertyNames = Object.keys(result[i]);
+                        var thead = document.createElement("thead");
+                        var tbody = document.createElement("tbody");
+                        var trHead = document.createElement("tr");
+                        var trBody = document.createElement("tr");
+                        for (let j = 0; j < allPropertyNames.length; j++) {
+
+                            var th = document.createElement("th");
+                            th.innerText = allPropertyNames[j];
+                            trHead.append(th);
+                            thead.append(trHead);
+                            table.append(thead);
+                            var td = document.createElement("td");
+                            td.append(result[i][allPropertyNames[j]]);
+                            trBody.append(td);
+                            
+                            
+                            
+                            tbody.append(trBody);
+                            table.append(tbody);
+                            li.append(table);
+                            
+                        }
+                        var td_edit = document.createElement("td");
+                        var btn_edit = document.createElement("a");
+                        btn_edit.setAttribute("href", "/Home/Edit/" + result[i][allPropertyNames[0]]);
+                        btn_edit.innerHTML = "Edit";
+                        btn_edit.classList.add("btn_edit");
+                        td_edit.append(btn_edit);
+                       
+
+                        var btn_delete = document.createElement("a");
+                        btn_delete.setAttribute("href", "/Home/Delete/" + result[i][allPropertyNames[0]]);
+                        btn_delete.innerHTML = "Delete";
+                        btn_delete.classList.add("btn_delete");
+                        td_edit.append(btn_delete);
+                        trBody.append(td_edit); 
+                        var actions = document.createElement("th");
+                        actions.innerHTML = "Actions";
+                        trHead.append(actions); 
+                    }
+
+                    if (result.length == 10) {
+                        var btn_load_more = document.createElement("button");
+                        btn_load_more.innerHTML = "Load More";
+                        btn_load_more.classList.add("btn","btn-primary");
+                        var li = document.createElement("li");
+                        li.classList.add("load-more");
+                        btn_load_more.addEventListener("click", loadMore, true);
+                        li.append(btn_load_more);
+                        ul_entity.append(li);
+                    }
+                    var input_entity = document.createElement("input");
+                    input_entity.setAttribute("type", "hidden");
+                    input_entity.setAttribute("id", "e_f");
+                    input_entity.value = result[0][allPropertyNames[allPropertyNames.length - 1]];
+                    ul_entity.append(input_entity);
+                }
+            }
+
+        })();
+    </script>
+}
+
