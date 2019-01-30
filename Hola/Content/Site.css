@@ -93,6 +93,7 @@ thead tr th {
 }
 ul#entity{
     padding:0;
+    padding: 0;
 }
 li.load-more{
     text-align:center;
