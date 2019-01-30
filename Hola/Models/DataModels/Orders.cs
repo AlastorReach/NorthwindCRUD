@@ -11,7 +11,8 @@ namespace Hola.Models.DataModels
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Orders
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,7 +21,9 @@ namespace Hola.Models.DataModels
             this.Order_Details = new HashSet<Order_Details>();
         }
     
+        [Display(Name="Order ID")]
         public int OrderID { get; set; }
+        [Display(Name = "Customer ID")]
         public string CustomerID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<System.DateTime> OrderDate { get; set; }

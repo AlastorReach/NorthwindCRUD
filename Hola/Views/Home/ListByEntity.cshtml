@@ -5,6 +5,30 @@
         <div class="form-group">
             <input class="form-control mx-auto" type="search" placeholder="Search Entity By Name" id="search-entity" />
         </div>
+        <div id="search-by-field-container" class="form-group hide" style="text-align: center;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Launch demo modal
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="entity-list-data-results">
         <ul id="entity"></ul>
@@ -12,9 +36,10 @@
 </div>
 
 @section Scripts{ 
-    <script>
+    <script async>
         (function () {
             var search_input = document.getElementById("search-entity");
+            var count = 0;
             var currentPage = 1;
             search_input.addEventListener("keypress", searchEntity, false);
 
@@ -53,15 +78,21 @@
                 var result = JSON.parse(ajax.responseText);
                 console.log(result);
                 if (result !== "Nothing found") {
-                    
+
                     console.log(allPropertyNames);
+                    var div_results = document.getElementById("entity-list-data-results");
                     var ul_entity = document.getElementById("entity");
+                    
                     if (type == 0) {
                         if (ul_entity.children.length > 0) {
                             ul_entity.innerHTML = "";
+                            document.getElementById("entity_title").parentNode.removeChild(document.getElementById("entity_title"));
+                            count = 0;
                         }
                     }
+                    
                     for (let i = 0; i < result.length; i++) {
+                        count++;
                         var li = document.createElement("li");
                         ul_entity.append(li);
                         var table = document.createElement("table");
@@ -93,12 +124,14 @@
                             
                             tbody.append(trBody);
                             table.append(tbody);
+                            table.setAttribute("id", "table-" + (count));
                             li.append(table);
                             
                         }
                         var td_edit = document.createElement("td");
                         var btn_edit = document.createElement("a");
-                        btn_edit.setAttribute("href", "/Home/Edit/" + result[i][allPropertyNames[0]]);
+                        btn_edit.setAttribute("href", "/Edit/" + result[0]["Entity"] + "/" +
+                            result[i][allPropertyNames[0]]);
                         btn_edit.innerHTML = "Edit";
                         btn_edit.classList.add("btn_edit");
                         td_edit.append(btn_edit);
@@ -130,8 +163,28 @@
                     input_entity.setAttribute("id", "e_f");
                     input_entity.value = result[0][allPropertyNames[allPropertyNames.length - 1]];
                     ul_entity.append(input_entity);
+                    if (type == 0) {
+                        var entity_title = document.createElement("h2");
+                        entity_title.setAttribute("id", "entity_title");
+                        entity_title.innerHTML = result[0][allPropertyNames[allPropertyNames.length - 1]];
+                        div_results.prepend(entity_title);
+                        var btn_search_by_field = document.getElementById("search-by-field-container");
+                        btn_search_by_field.classList.remove("hide");
+
+                        btn_search_by_field.addEventListener("click", populateModal, true);
+                    }
+                    
                 }
             }
+
+            function populateModal() {
+                var table1 = document.getElementById("table-1");
+                var thead = table1.getElementsByTagName("thead");
+                var th_list = thead[0].getElementsByTagName("th");
+                console.log(th_list);
+            }
+
+
 
         })();
     </script>

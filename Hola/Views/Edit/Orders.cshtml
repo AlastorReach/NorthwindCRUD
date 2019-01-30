@@ -1,0 +1,191 @@
+﻿@model Hola.Models.DataModels.Orders
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<h2>Orders</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Orders</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.OrderID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CustomerID, "Customer ID", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CustomerID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.EmployeeID, "Employee ID", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EmployeeID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.OrderDate, "Order Date", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="date" data-val="true" value="@Model.OrderDate.Value.ToString("yyyy-MM-dd")" class="form-control" data-val-date="El campo OrderDate debe ser una fecha." id="OrderDate" name="OrderDate"/>
+            @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.RequiredDate, "Required Date", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="date" data-val="true" value="@Model.RequiredDate.Value.ToString("yyyy-MM-dd")" class="form-control" data-val-date="El campo RequiredDate debe ser una fecha." id="RequiredDate" name="RequiredDate" />
+            @Html.ValidationMessageFor(model => model.RequiredDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShippedDate, "Shipped Date", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="date" data-val="true" value="@Model.ShippedDate.Value.ToString("yyyy-MM-dd")" class="form-control" data-val-date="El campo ShippedDate debe ser una fecha." id="ShippedDate" name="ShippedDate" />
+            @Html.ValidationMessageFor(model => model.ShippedDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipVia, "Ship Via", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipVia, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipVia, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Freight, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Freight, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Freight, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipName, "Ship Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipAddress, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipAddress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipCity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipCity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipCity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipRegion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipRegion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipRegion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipPostalCode, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipPostalCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipPostalCode, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ShipCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ShipCountry, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ShipCountry, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" id="submit_form" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts{
+    <script>
+        (function () {
+
+            //Timers
+            var fields_validation = document.getElementsByClassName("field-validation-valid");
+
+            var btn_submit = document.getElementById("submit_form");
+            btn_submit.addEventListener("click", sendData, false);
+
+            function sendData(e) {
+                e.preventDefault();
+                console.log(e);
+                if (validateFields()) {
+                    document.getElementsByTagName("form")[0].submit();
+                }
+
+            }
+
+            function validateFields() {
+                var customer_id = document.getElementById("CustomerID");
+                var employee_id = document.getElementById("EmployeeID");
+                var order_date = document.getElementById("OrderDate");
+                var required_date = document.getElementById("RequiredDate");
+                var shipped_date = document.getElementById("ShippedDate");
+                var freight = document.getElementById("Freight");
+                var ship_postal_code = document.getElementById("ShipPostalCode");
+
+                //Validating fields
+                if (customer_id.value == "") {
+                    var span = customer_id.parentNode.getElementsByTagName("span");
+                    span[0].innerHTML = "Customer ID must not be empty";
+                    span[0].classList.add("text-danger-visible");
+                    doSomethingWithTimeOut(span[0], "text-danger-visible", 1500);
+                    return false;
+                }
+                if (isNaN(parseFloat(freight))) {
+                    var span = freight.parentNode.getElementsByTagName("span");
+                    span[0].innerHTML = "Freight field must contain a number";
+                    span[0].classList.add("text-danger-visible");
+                    doSomethingWithTimeOut(span[0], "text-danger-visible", 1500);
+                    return false;
+                }
+                return true;
+            }
+
+            function doSomethingWithTimeOut(element, cl, time) {
+                setTimeout(function () {
+                    element.classList.remove(cl);
+                    element.innerHTML = "";
+                }, time);
+            }
+    
+        })();
+    </script>
+    
+}
