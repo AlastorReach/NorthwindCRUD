@@ -110,7 +110,7 @@ namespace Hola.Controllers
 
         private Object findEntityAndReturnData(string entity, int currentPage, int pageSize)
         {
-            List<string> lista = new List<string>() { "Employees", "Categories", "Customers", "Orders" };
+            List<string> lista = new List<string>() { "Employees", "Categories", "Customers", "Orders", "Products" };
             MatchCollection matches = null;
             string match = "";
             IQueryable<Object> entityReturned = Enumerable.Empty<Object>().AsQueryable();
@@ -170,6 +170,22 @@ namespace Hola.Controllers
                                 Entity = "Orders"
                             }).Skip((currentPage - 1) * 10).Take(10).ToList();
 
+                case "Products":
+                    return (from product in db.Products.OrderBy(a => a.ProductID)
+                            select new
+                            {
+                                productId = product.ProductID,
+                                productName = product.ProductName,
+                                supplier = product.SupplierID,
+                                category = product.CategoryID,
+                                qPerUnit = product.QuantityPerUnit,
+                                unitPrice = product.UnitPrice,
+                                inStock = product.UnitsInStock,
+                                onOrder = product.UnitsOnOrder,
+                                reorderLevel = product.ReorderLevel,
+                                discontinued = product.Discontinued,
+                                Entity = "Products",
+                            }).Skip((currentPage - 1) * 10).Take(10).ToList();
                 default: return null;
             }
         }

@@ -111,5 +111,39 @@ namespace Hola.Controllers
         Action<Exception> errorHandler = (ex) => {
             Console.WriteLine("Ocurrio una exception");
         };
+
+        [HttpGet]
+        public ActionResult Products(int id)
+        {
+            var productFound = (from product in db.Products where product.ProductID == id select product).FirstOrDefault();
+            if(productFound != null)
+            {
+                return View(productFound);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Products(Products p)
+        {
+            db.Entry(p).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+                return View(p);
+            }
+            catch (Exception ex)
+            {
+                if (ex is SqlException || ex is DbUpdateException)
+                {
+                    return RedirectToAction("Products", "Edit", "There was an error");
+                }
+                throw;
+            }
+        }
     }
 }

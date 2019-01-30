@@ -115,3 +115,46 @@ li.load-more{
     transition: opacity 3s;
     opacity: 1;
 }
+
+.text-center {
+    text-align:center;
+}
+
+.dark {
+    background-color: #222222;
+    padding: 5px;
+    color: white;
+}
+
+.mt-20{
+    margin-top: 20px;
+}
+.back-to-list {
+    background-color: #222222;
+    color: #24bd37;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+}
+.edit-entity-title {
+    color: #1c9c20;
+    font-weight: 700;
+}
+
+.footer-absolute {
+    background-color: #222222;
+    color: white;
+    display: flex;
+    width: 100vw;
+    left: 0;
+    bottom: 0;
+    height: 20vh;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    min-height: 250px;
+    position: relative;
+}
+.navbar-brand {
+    color: #1c9c20!important;
+    font-weight: 900;
+}
