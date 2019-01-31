@@ -14,6 +14,11 @@ namespace Hola.Controllers
     {
         private NorthwindEntities db = new NorthwindEntities();
 
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View();
+        }
         // GET: Edit
         [HttpGet]
         public ActionResult Employees(int id)

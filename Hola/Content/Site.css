@@ -138,6 +138,16 @@ li.load-more{
 .mt-20{
     margin-top: 20px;
 }
+.my-20{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+.pb-20{
+    padding-bottom:20px;
+}
+.d-flex{
+    display:flex;
+}
 .back-to-list {
     background-color: #222222;
     color: #24bd37;
