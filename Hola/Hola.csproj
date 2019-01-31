@@ -192,6 +192,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DeleteController.cs" />
     <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -254,6 +255,13 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Animation\animated.css" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-grid.css" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-grid.min.css" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-reboot.css" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-reboot.min.css" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap.css" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -281,7 +289,21 @@
     <Content Include="Models\DataModels\DataModel.edmx.diagram">
       <DependentUpon>DataModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.js.map" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.min.js.map" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-grid.css.map" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-grid.min.css.map" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-reboot.css.map" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap.css.map" />
+    <Content Include="Content\Bootstrap-4.2.1\bootstrap.min.css.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.bundle.js" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.js" />
+    <Content Include="Scripts\Bootstrap4.2.1\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -336,6 +358,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Delete\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

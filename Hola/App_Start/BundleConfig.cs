@@ -25,6 +25,15 @@ namespace Hola
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            //My Custom
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap_min").Include(
+                        "~/Scripts/Bootstrap4.2.1/bootstrap.js*"));
+
+            bundles.Add(new StyleBundle("~/Content/css_boostrap_4_2_1").Include(
+                     "~/Content/Animation/animated.css"));
+
+
         }
     }
 }

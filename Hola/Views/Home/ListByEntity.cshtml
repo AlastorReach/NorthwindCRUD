@@ -34,8 +34,11 @@
         <ul id="entity"></ul>
     </div>
 </div>
+<div id="preloader" class="preloader hide">
+    <div id="loader" class="loader"></div>
+</div>
 
-@section Scripts{ 
+@section Scripts{
     <script async>
         (function () {
             var search_input = document.getElementById("search-entity");
@@ -55,12 +58,17 @@
                         ajax.addEventListener("load", function () { populateList(this, 0) }, false);
                         ajax.open("POST", "/Home/SearchEntity");
                         ajax.send(formData);
+
+                        var preloader = document.getElementById("preloader");
+                        preloader.classList.remove("hide");
+                        preloader.classList.add("preloder");
+                        var loader = document.getElementById("loader");
+                        loader.classList.add("loader");
                     }
                 }
             }
 
             function loadMore(e) {
-                console.log(e.target);
                 e.target.parentNode.removeChild(e.target);
                 var input_text = document.getElementById("e_f").value;
                 currentPage = currentPage + 1;
@@ -68,21 +76,29 @@
                 var formData = new FormData();
                 formData.append("entityName", input_text);
                 formData.append("currentPage", currentPage);
-                ajax.addEventListener("load", function () { populateList(this, 1) }, false);
+                ajax.addEventListener("load", function () { populateList(this, 1) }, true);
                 ajax.open("POST", "/Home/SearchEntity");
                 ajax.send(formData);
+
+                var preloader = document.getElementById("preloader");
+                preloader.classList.remove("hide");
+                preloader.classList.add("preloder");
+                var loader = document.getElementById("loader");
+                loader.classList.add("loader");
             }
 
-            function populateList(ajax, type) {
+            async function populateList(ajax, type) {
 
                 var result = JSON.parse(ajax.responseText);
                 console.log(result);
                 if (result !== "Nothing found") {
-
-                    console.log(allPropertyNames);
+                    const delay = ms => new Promise(res => setTimeout(res, ms));
+                    
                     var div_results = document.getElementById("entity-list-data-results");
                     var ul_entity = document.getElementById("entity");
-                    
+
+
+
                     if (type == 0) {
                         if (ul_entity.children.length > 0) {
                             ul_entity.innerHTML = "";
@@ -90,8 +106,18 @@
                             count = 0;
                         }
                     }
-                    
+
                     for (let i = 0; i < result.length; i++) {
+                        if (i == 0) {
+                            //Preloader
+                            var preloader = document.getElementById("preloader");
+                            preloader.classList.add("hide");
+                            preloader.classList.remove("preloder");
+                            var loader = document.getElementById("loader");
+                            loader.classList.remove("loader");
+
+                           
+                        }
                         count++;
                         var li = document.createElement("li");
                         ul_entity.append(li);
@@ -111,6 +137,21 @@
                         var trBody = document.createElement("tr");
                         for (let j = 0; j < allPropertyNames.length; j++) {
 
+                            if (i == 0 && j == 0) {
+                                if (type == 0) {
+                                    var entity_title = document.createElement("h2");
+                                    entity_title.setAttribute("id", "entity_title");
+                                    var icon = document.createElement("i");
+                                    icon.classList.add("fa", "fa-phone")
+                                    entity_title.innerHTML = result[0][allPropertyNames[allPropertyNames.length - 1]];
+                                    div_results.prepend(entity_title);
+                                    var btn_search_by_field = document.getElementById("search-by-field-container");
+                                    btn_search_by_field.classList.remove("hide");
+
+                                    btn_search_by_field.addEventListener("click", populateModal, true);
+                                }
+                            }
+
                             var th = document.createElement("th");
                             th.innerText = allPropertyNames[j];
                             trHead.append(th);
@@ -119,15 +160,18 @@
                             var td = document.createElement("td");
                             td.append(result[i][allPropertyNames[j]]);
                             trBody.append(td);
-                            
-                            
-                            
+
+
+
                             tbody.append(trBody);
                             table.append(tbody);
                             table.setAttribute("id", "table-" + (count));
+                            table.classList.add("animated", "fadeInUp")
                             li.append(table);
-                            
+
                         }
+                        
+
                         var td_edit = document.createElement("td");
                         var btn_edit = document.createElement("a");
                         btn_edit.setAttribute("href", "/Edit/" + result[0]["Entity"] + "/" +
@@ -135,23 +179,34 @@
                         btn_edit.innerHTML = "Edit";
                         btn_edit.classList.add("btn_edit");
                         td_edit.append(btn_edit);
-                       
 
-                        var btn_delete = document.createElement("a");
-                        btn_delete.setAttribute("href", "/Home/Delete/" + result[i][allPropertyNames[0]]);
+
+                        var btn_delete = document.createElement("button");
+                        btn_delete.setAttribute("data-entity", result[0]["Entity"]);
+                        btn_delete.setAttribute("data-id", result[i][allPropertyNames[0]]);
+                        btn_delete.setAttribute("data-index", count);
+                        btn_delete.addEventListener("click", deleteEntity, false);
                         btn_delete.innerHTML = "Delete";
-                        btn_delete.classList.add("btn_delete");
+                        btn_delete.classList.add("btn_delete", "btn");
                         td_edit.append(btn_delete);
-                        trBody.append(td_edit); 
+                        trBody.append(td_edit);
                         var actions = document.createElement("th");
                         actions.innerHTML = "Actions";
-                        trHead.append(actions); 
+                        trHead.append(actions);
                     }
+
+                    await delay(2000);
+                    //Preloader
+                    var preloader = document.getElementById("preloader");
+                    preloader.classList.add("hide");
+                    preloader.classList.remove("preloder");
+                    var loader = document.getElementById("loader");
+                    loader.classList.remove("loader");
 
                     if (result.length == 10) {
                         var btn_load_more = document.createElement("button");
                         btn_load_more.innerHTML = "Load More";
-                        btn_load_more.classList.add("btn","btn-primary");
+                        btn_load_more.classList.add("btn", "btn-primary");
                         var li = document.createElement("li");
                         li.classList.add("load-more");
                         btn_load_more.addEventListener("click", loadMore, true);
@@ -163,17 +218,12 @@
                     input_entity.setAttribute("id", "e_f");
                     input_entity.value = result[0][allPropertyNames[allPropertyNames.length - 1]];
                     ul_entity.append(input_entity);
-                    if (type == 0) {
-                        var entity_title = document.createElement("h2");
-                        entity_title.setAttribute("id", "entity_title");
-                        entity_title.innerHTML = result[0][allPropertyNames[allPropertyNames.length - 1]];
-                        div_results.prepend(entity_title);
-                        var btn_search_by_field = document.getElementById("search-by-field-container");
-                        btn_search_by_field.classList.remove("hide");
-
-                        btn_search_by_field.addEventListener("click", populateModal, true);
-                    }
                     
+
+                    
+                    
+                    
+
                 }
             }
 
@@ -182,6 +232,32 @@
                 var thead = table1.getElementsByTagName("thead");
                 var th_list = thead[0].getElementsByTagName("th");
                 console.log(th_list);
+            }
+
+            function deleteEntity(e) {
+                var ajax = new XMLHttpRequest();
+                ajax.addEventListener("load", function () { completeDelete(this, e.target) }, true);
+                var entity = e.target.getAttribute("data-entity");
+                var id = e.target.getAttribute("data-id");
+                ajax.open("POST", "/Delete/" + entity);
+                var formData = new FormData();
+                formData.append("id", id);
+                ajax.send(formData);
+
+            }
+
+            function completeDelete(ajax, element) {
+                var response = JSON.parse(ajax.responseText);
+                console.log(response);
+                var data_index = element.getAttribute("data-index");
+                console.log(data_index);
+                var table_to_be_deleted = document.getElementById("table-" + data_index);
+                table_to_be_deleted.classList.add("fadeOutLeft", "animated");
+                setTimeout(function () {
+                    table_to_be_deleted.remove();
+                }, 1500);
+                
+
             }
 
 
