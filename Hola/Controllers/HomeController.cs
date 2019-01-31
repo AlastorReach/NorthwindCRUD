@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
@@ -89,9 +90,17 @@ namespace Hola.Controllers
             return View();
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult SearchEntity(string entityName, int currentPage)
+        public ActionResult SearchEntity(FormCollection formCollection)
         {
+            if (!ModelState.IsValid)
+            {
+                //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Not Valid");
+            }
+            var entityName = formCollection["entityName"];
+            int currentPage = int.Parse(formCollection["currentPage"]);
             var sanitizer = new HtmlSanitizer();
             string entitySanitinized = sanitizer.Sanitize(entityName);
             var list = this.findEntityAndReturnData(entitySanitinized, currentPage, 10);

@@ -1,4 +1,4 @@
-﻿
+﻿@Html.AntiForgeryToken()
 <div id="list-by-entity">
     <h2 class="text-center">ListByEntity</h2>
     <div id="search-entity-container">
@@ -55,7 +55,12 @@
                         var formData = new FormData();
                         formData.append("entityName", input_text);
                         formData.append("currentPage", currentPage);
+                        var token = document.getElementsByName("__RequestVerificationToken");
+                        formData.append("__RequestVerificationToken", token[0].value);
                         ajax.addEventListener("load", function () { populateList(this, 0) }, false);
+                        ajax.onerror = function () {
+                            console.log("** An error occurred during the transaction");
+                        }
                         ajax.open("POST", "/Home/SearchEntity");
                         ajax.send(formData);
 
@@ -75,6 +80,8 @@
                 var ajax = new XMLHttpRequest();
                 var formData = new FormData();
                 formData.append("entityName", input_text);
+                var token = document.getElementsByName("__RequestVerificationToken");
+                formData.append("__RequestVerificationToken", token[0].value);
                 formData.append("currentPage", currentPage);
                 ajax.addEventListener("load", function () { populateList(this, 1) }, true);
                 ajax.open("POST", "/Home/SearchEntity");
@@ -90,10 +97,9 @@
             async function populateList(ajax, type) {
 
                 var result = JSON.parse(ajax.responseText);
-                console.log(result);
                 if (result !== "Nothing found") {
                     const delay = ms => new Promise(res => setTimeout(res, ms));
-                    
+
                     var div_results = document.getElementById("entity-list-data-results");
                     var ul_entity = document.getElementById("entity");
 
@@ -116,7 +122,7 @@
                             var loader = document.getElementById("loader");
                             loader.classList.remove("loader");
 
-                           
+
                         }
                         count++;
                         var li = document.createElement("li");
@@ -170,7 +176,7 @@
                             li.append(table);
 
                         }
-                        
+
 
                         var td_edit = document.createElement("td");
                         var btn_edit = document.createElement("a");
@@ -218,11 +224,11 @@
                     input_entity.setAttribute("id", "e_f");
                     input_entity.value = result[0][allPropertyNames[allPropertyNames.length - 1]];
                     ul_entity.append(input_entity);
-                    
 
-                    
-                    
-                    
+
+
+
+
 
                 }
             }
@@ -231,7 +237,6 @@
                 var table1 = document.getElementById("table-1");
                 var thead = table1.getElementsByTagName("thead");
                 var th_list = thead[0].getElementsByTagName("th");
-                console.log(th_list);
             }
 
             function deleteEntity(e) {
@@ -248,15 +253,13 @@
 
             function completeDelete(ajax, element) {
                 var response = JSON.parse(ajax.responseText);
-                console.log(response);
                 var data_index = element.getAttribute("data-index");
-                console.log(data_index);
                 var table_to_be_deleted = document.getElementById("table-" + data_index);
                 table_to_be_deleted.classList.add("fadeOutLeft", "animated");
                 setTimeout(function () {
                     table_to_be_deleted.remove();
                 }, 1500);
-                
+
 
             }
 
